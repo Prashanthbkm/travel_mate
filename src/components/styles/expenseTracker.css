@@ -1,0 +1,74 @@
+.expense-tracker {
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+}
+
+.expense-tracker h2 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.expense-tracker .form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.expense-tracker input[type="text"],
+.expense-tracker input[type="number"] {
+  flex: 1;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.expense-tracker input[type="text"]:focus,
+.expense-tracker input[type="number"]:focus {
+  border-color: #3498db;
+}
+
+.expense-tracker button {
+  padding: 10px 20px;
+  background-color: #3498db;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.expense-tracker button:hover {
+  background-color: #2980b9;
+}
+
+.expense-tracker h3 {
+  text-align: right;
+  margin-bottom: 15px;
+  color: #27ae60;
+}
+
+.expense-tracker .expense-list {
+  list-style: none;
+  padding: 0;
+  max-height: 250px;
+  overflow-y: auto;
+  border-top: 1px solid #ddd;
+}
+
+.expense-tracker .expense-list li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  color: #34495e;
+}

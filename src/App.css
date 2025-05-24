@@ -1,0 +1,285 @@
+/* App.css - Optimized for TravelMate Application */
+
+:root {
+  --header-height: 70px;
+  --sidebar-width: 280px;
+  --transition-speed: 0.3s;
+  /* Color variables matching TravelMate theme */
+  --primary-color: #3498db;
+  --secondary-color: #2980b9;
+  --dark-color: #2c3e50;
+  --light-color: #ecf0f1;
+  --accent-color: #f39c12;
+  --background-color: #f5f5f5;
+  --text-color: #333;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Core Layout Structure */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  padding-top: var(--header-height); /* Prevent content hiding behind fixed header */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative; /* For absolute positioning context */
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  margin-top: var(--header-height); /* Ensures content starts below header */
+  transition: all var(--transition-speed) ease;
+  max-width: 1200px; /* Prevent content from stretching too wide */
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Header Compatibility */
+.header ~ .main-content {
+  padding-top: 20px; /* Reduced space since margin-top already handles header */
+}
+
+/* Hero Section */
+.App-header {
+  position: relative;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  overflow: hidden;
+  background-color: var(--dark-color);
+  margin-bottom: 40px;
+  z-index: 1;
+  width: 100%;
+  text-align: center;
+}
+
+.App-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/images/bike.svg') no-repeat left bottom,
+              url('/images/boy.svg') no-repeat right bottom,
+              url('/images/luggage.svg') no-repeat center bottom;
+  background-size: 200px auto, 150px auto, 100px auto;
+  animation: backgroundScroll 15s linear infinite;
+  z-index: -1;
+  opacity: 0.7; /* Make illustrations slightly transparent */
+}
+
+@keyframes backgroundScroll {
+  0% { background-position: -200px 100%, calc(100% + 150px) 100%, 50% 100%; }
+  100% { background-position: calc(100% + 200px) 100%, -150px 100%, 50% 100%; }
+}
+
+/* Sidebar Layout */
+.sidebar-container {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  width: var(--sidebar-width);
+  height: calc(100vh - var(--header-height));
+  background-color: var(--light-color);
+  box-shadow: 2px 0 5px var(--shadow-color);
+  overflow-y: auto;
+  transition: transform var(--transition-speed) ease;
+  z-index: 900;
+  transform: translateX(-100%); /* Hidden by default */
+}
+
+.sidebar-container.active {
+  transform: translateX(0); /* Visible when active */
+}
+
+/* Footer Styling */
+footer {
+  background-color: var(--dark-color);
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: auto;
+  width: 100%;
+}
+
+footer a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Animation Compatibility */
+@media (prefers-reduced-motion: reduce) {
+  .App-logo, .App-header::before {
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  :root {
+    --sidebar-width: 240px;
+  }
+  
+  .main-content {
+    padding: 15px;
+  }
+  
+  .sidebar-overlay {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    height: calc(100vh - var(--header-height));
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 850;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-speed) ease;
+  }
+  
+  .sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --header-height: 60px;
+  }
+  
+  .App-header {
+    height: 300px;
+    margin-bottom: 30px;
+  }
+  
+  .App-header::before {
+    background-size: 150px auto, 120px auto, 80px auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 10px;
+  }
+  
+  .App-header {
+    height: 250px;
+  }
+  
+  .App-header::before {
+    background-size: 100px auto, 80px auto, 60px auto;
+    opacity: 0.5; /* More transparent on small screens */
+  }
+}
+
+/* Header Styles */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-shadow: 0 2px 5px var(--shadow-color);
+  z-index: 1000;
+}
+
+/* Content Transition Effects */
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all var(--transition-speed) ease;
+}
+
+/* Utility Classes */
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+/* Accessibility Improvements */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Button Styles (for consistency) */
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition-speed) ease;
+}
+
+.button:hover {
+  background-color: var(--secondary-color);
+}
+
+.button.accent {
+  background-color: var(--accent-color);
+}
+
+.button.accent:hover {
+  filter: brightness(1.1);
+}

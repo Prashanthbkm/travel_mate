@@ -1,0 +1,334 @@
+/* Base Styles */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8fafc;
+  color: #1e293b;
+}
+
+/* Layout Styles */
+.itinerary-planner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.planner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.planner-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.planner-container {
+  display: grid;
+  grid-template-columns: 300px 1fr 400px;
+  gap: 24px;
+  height: calc(100vh - 120px);
+}
+
+/* Panel Styles */
+.recommendations-panel,
+.itinerary-panel,
+.map-panel {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.recommendations-panel h2,
+.itinerary-panel h2,
+.map-panel h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #1e293b;
+}
+
+/* Recommendation Panel Styles */
+.category-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.tab-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #e2e8f0;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab-btn.active {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.search-bar {
+  margin-bottom: 16px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.ai-recommendations-btn {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  background-color: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.ai-recommendations-btn:hover {
+  background-color: #7c3aed;
+}
+
+.ai-recommendations-btn:disabled {
+  background-color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.recommendations-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recommendations-list li {
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  background-color: #f8fafc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.recommendations-list li:hover {
+  background-color: #e2e8f0;
+}
+
+.recommendations-list li span {
+  font-size: 14px;
+}
+
+.add-btn {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Itinerary Panel Styles */
+.activities-list {
+  min-height: 200px;
+  border: 2px dashed #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  background-color: #f8fafc;
+}
+
+.activity-item {
+  padding: 12px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  margin-bottom: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  transition: all 0.2s;
+}
+
+.activity-item.selected {
+  border-left: 4px solid #3b82f6;
+  background-color: #f0f7ff;
+}
+
+.activity-item:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.activity-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.activity-meta {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.activity-type {
+  text-transform: capitalize;
+  background-color: #e2e8f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 0 4px;
+}
+
+.activity-details {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.activity-details h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  color: #475569;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.form-group textarea {
+  min-height: 80px;
+}
+
+/* Map Panel Styles */
+.map-container {
+  height: 400px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.save-btn,
+.share-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.2s;
+}
+
+.save-btn {
+  background-color: #10b981;
+  color: white;
+}
+
+.share-btn {
+  background-color: #64748b;
+  color: white;
+}
+
+.save-btn:hover,
+.share-btn:hover {
+  opacity: 0.9;
+}
+
+/* Toast Notifications */
+.Toastify__toast {
+  font-family: 'Inter', sans-serif;
+  border-radius: 8px !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+  .planner-container {
+    grid-template-columns: 250px 1fr 350px;
+  }
+}
+
+@media (max-width: 992px) {
+  .planner-container {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  
+  .map-container {
+    height: 300px;
+  }
+}
+
+/* Animation for drag and drop */
+.dragging {
+  background-color: #f0f7ff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
