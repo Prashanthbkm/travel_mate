@@ -13,15 +13,23 @@
   text-align: center;
 }
 
+.expense-tracker .loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
 .expense-tracker .form {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .expense-tracker input[type="text"],
 .expense-tracker input[type="number"] {
   flex: 1;
+  min-width: 120px;
   padding: 10px;
   font-size: 1rem;
   border-radius: 6px;
@@ -44,31 +52,65 @@
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  min-width: 100px;
 }
 
-.expense-tracker button:hover {
+.expense-tracker button:hover:not(:disabled) {
   background-color: #2980b9;
+}
+
+.expense-tracker button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
 }
 
 .expense-tracker h3 {
   text-align: right;
   margin-bottom: 15px;
   color: #27ae60;
+  font-size: 1.2rem;
 }
 
 .expense-tracker .expense-list {
   list-style: none;
   padding: 0;
-  max-height: 250px;
+  max-height: 400px;
   overflow-y: auto;
   border-top: 1px solid #ddd;
 }
 
 .expense-tracker .expense-list li {
-  padding: 10px;
+  padding: 12px;
   border-bottom: 1px solid #eee;
   font-size: 1rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   color: #34495e;
+  background: white;
+  margin-bottom: 5px;
+  border-radius: 6px;
+}
+
+.expense-tracker .expense-list li .date {
+  font-size: 0.8rem;
+  color: #7f8c8d;
+  margin-left: 10px;
+}
+
+.expense-tracker .expense-list li .delete-btn {
+  background: #e74c3c;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.expense-tracker .expense-list .empty {
+  text-align: center;
+  color: #7f8c8d;
+  font-style: italic;
+  padding: 30px;
 }

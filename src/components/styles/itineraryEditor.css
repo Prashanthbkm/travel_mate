@@ -10,8 +10,17 @@
 .itinerary-editor h2 {
   text-align: center;
   color: #00796b;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
   font-weight: 700;
+}
+
+.itinerary-editor .subtitle {
+  color: #004d40;
+  font-size: 0.9rem;
+  margin-top: -5px;
+  margin-bottom: 25px;
+  text-align: center;
+  opacity: 0.8;
 }
 
 .itinerary-editor .form {
@@ -52,6 +61,7 @@
 .itinerary-editor ul {
   list-style-type: none;
   padding-left: 0;
+  min-height: 100px;
 }
 
 .itinerary-editor ul li {
@@ -63,6 +73,11 @@
   color: #004d40;
   font-weight: 500;
   font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.itinerary-editor ul li:hover {
+  background-color: #e0f2f1;
 }
 
 .itinerary-editor ul li button {
@@ -72,8 +87,45 @@
   font-size: 1.1rem;
   cursor: pointer;
   transition: color 0.2s ease;
+  padding: 5px 8px;
+  border-radius: 4px;
 }
 
 .itinerary-editor ul li button:hover {
   color: #9a0007;
+  background-color: #ffebee;
+}
+
+.itinerary-editor .empty-state {
+  text-align: center;
+  color: #00796b;
+  font-style: italic;
+  padding: 30px 20px;
+  opacity: 0.7;
+}
+
+.itinerary-editor .loading {
+  text-align: center;
+  padding: 40px;
+  color: #00796b;
+  font-size: 1.1rem;
+}
+
+.itinerary-editor .backend-status {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.8rem;
+  padding: 10px;
+  border-radius: 6px;
+  background-color: #e0f2f1;
+}
+
+.itinerary-editor .connected {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.itinerary-editor .disconnected {
+  color: #f57c00;
+  font-weight: 600;
 }

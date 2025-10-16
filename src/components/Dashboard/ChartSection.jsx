@@ -1,54 +1,57 @@
-// ChartSection.js (updated with travel data)
 import React, { useState, useEffect } from "react";
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 
-const getChartData = async () => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  return [
-    { name: "Jan", trips: 2, destinations: 3 },
-    { name: "Feb", trips: 3, destinations: 5 },
-    { name: "Mar", trips: 1, destinations: 2 },
-    { name: "Apr", trips: 4, destinations: 6 },
-    { name: "May", trips: 2, destinations: 4 },
-  ];
-};
-
-const ChartSection = () => {
+const ChartSection = ({ chartData, upcomingTrips, savedDestinations }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const chartData = await getChartData();
+    if (chartData) {
       setData(chartData);
       setLoading(false);
-    };
-    fetchData();
-  }, []);
+    } else {
+      // Fallback to empty data
+      setData([]);
+      setLoading(false);
+    }
+  }, [chartData]);
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md">
-      <h2 className="text-lg font-bold mb-4">Travel Activity</h2>
+    <div className="chart-section">
+      <h2>Travel Activity</h2>
       {loading ? (
-        <div>Loading travel data...</div>
-      ) : (
+        <div className="chart-loading">Loading travel data...</div>
+      ) : data.length > 0 ? (
         <ResponsiveContainer width="100%" height={200}>
-          <LineChart data={data}>
-            <CartesianGrid stroke="#ccc" />
+          <BarChart data={data}>
+            <CartesianGrid stroke="#ccc" strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Line type="monotone" dataKey="trips" stroke="#8884d8" name="Trips" />
-            <Line type="monotone" dataKey="destinations" stroke="#82ca9d" name="Destinations" />
-          </LineChart>
+            <Bar dataKey="trips" fill="#8884d8" name="Trips" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="destinations" fill="#82ca9d" name="Destinations" radius={[4, 4, 0, 0]} />
+          </BarChart>
         </ResponsiveContainer>
-      )}
-      <div className="mt-4 grid grid-cols-2 gap-2">
-        <div className="bg-blue-50 p-2 rounded">
-          <p className="text-sm text-blue-800">Upcoming Trips: 3</p>
+      ) : (
+        <div className="no-data">
+          <p>No travel data available yet</p>
+          <small>Start planning trips to see your activity!</small>
         </div>
-        <div className="bg-green-50 p-2 rounded">
-          <p className="text-sm text-green-800">Saved Destinations: 12</p>
+      )}
+      <div className="chart-stats">
+        <div className="stat-card">
+          <div className="stat-icon">✈️</div>
+          <div className="stat-info">
+            <div className="stat-number">{upcomingTrips || 0}</div>
+            <div className="stat-label">Upcoming Trips</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon">❤️</div>
+          <div className="stat-info">
+            <div className="stat-number">{savedDestinations || 0}</div>
+            <div className="stat-label">Saved Destinations</div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Header from './components/Header';
@@ -6,75 +6,128 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import BookingIntegration from './components/Booking/BookingIntegration';
+import BookingManagement from './components/Booking/BookingManagement'; // Your existing component
 import Dashboard from './components/Dashboard/Dashboard';
 import ExploreDestinations from './components/ExploreDestinations/ExploreDestinations';
 import LeafletMap from './components/LeafletMap/LeafletMap';
 import ItineraryPlanner from './components/ItineraryPlanner/ItineraryPlanner';
 import RealTimeFeatures from './components/RealTimeFeatures/RealTimeFeatures';
+import DestinationDetail from './components/DestinationDetail'; 
 
 import ExpenseTracker from './components/Features/ExpenseTracker';
 import TravelCommunity from './components/Features/TravelCommunity';
 import ItineraryEditor from './components/Features/ItineraryEditor';
 import CarbonCalculator from './components/Features/CarbonCalculator';
 
+import ProtectedRoute from './components/ProtectedRoute';
+import TravelChatbot from './components/Chatbot/TravelChatbot';
+import HomePage from './components/HomePage/HomePage';
 import './App.css';
-import { fetchWelcomeMessage } from './api';
 
 const App = () => {
-  const [welcomeMessage, setWelcomeMessage] = useState("Loading...");
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const message = await fetchWelcomeMessage();
-        setWelcomeMessage(message);
-      } catch (err) {
-        console.error("Error fetching welcome message:", err);
-        setError("Failed to fetch welcome message.");
-      }
-    };
-    fetchData();
-  }, []);
-
   return (
     <Router>
       <div className="app-layout">
         <Header />
 
-        <main className="min-h-screen p-8 bg-gray-100">
+        <main className="main-content">
           <Routes>
-            <Route
-              path="/"
-              element={
-                <div className="text-center">
-                  {error ? (
-                    <h1 className="text-3xl font-bold text-red-600 mb-4">{error}</h1>
-                  ) : (
-                    <h1 className="text-3xl font-bold mb-4">{welcomeMessage}</h1>
-                  )}
-                  <p className="text-lg">Start planning your next adventure!</p>
-                </div>
-              }
-            />
+            {/* New Beautiful Homepage */}
+            <Route path="/" element={<HomePage />} />
+
+            {/* Public Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/explore" element={<ExploreDestinations />} />
-            <Route path="/map" element={<LeafletMap />} />
-            <Route path="/booking" element={<BookingIntegration />} />
-            <Route path="/itinerary" element={<ItineraryPlanner />} />
-            <Route path="/realtime" element={<RealTimeFeatures />} />
 
-            {/* Features routes */}
-            <Route path="/features/expense-tracker" element={<ExpenseTracker />} />
-            <Route path="/features/travel-community" element={<TravelCommunity />} />
-            <Route path="/features/itinerary-editor" element={<ItineraryEditor />} />
-            <Route path="/features/carbon-calculator" element={<CarbonCalculator />} />
+            {/* Protected Routes */}
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/explore" element={
+              <ProtectedRoute>
+                <ExploreDestinations />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/map" element={
+              <ProtectedRoute>
+                <LeafletMap />
+              </ProtectedRoute>
+            } />
+
+            {/* Booking Routes - Use your existing components */}
+            <Route path="/booking" element={
+              <ProtectedRoute>
+                <BookingIntegration />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/bookings" element={
+              <ProtectedRoute>
+                <BookingManagement />
+              </ProtectedRoute>
+            } />
+
+            {/* Itinerary Routes */}
+            <Route path="/itinerary/:id?" element={
+              <ProtectedRoute>
+                <ItineraryPlanner />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/itinerary/create" element={
+              <ProtectedRoute>
+                <ItineraryPlanner />
+              </ProtectedRoute>
+            } />
+
+            {/* Real-time Features */}
+            <Route path="/realtime" element={
+              <ProtectedRoute>
+                <RealTimeFeatures />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/destination/:id" element={
+              <ProtectedRoute>
+                <DestinationDetail />
+              </ProtectedRoute>
+            } />
+
+            {/* Features Routes */}
+            <Route path="/features/expense-tracker" element={
+              <ProtectedRoute>
+                <ExpenseTracker />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/features/travel-community" element={
+              <ProtectedRoute>
+                <TravelCommunity />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/features/itinerary-editor" element={
+              <ProtectedRoute>
+                <ItineraryEditor />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/features/carbon-calculator" element={
+              <ProtectedRoute>
+                <CarbonCalculator />
+              </ProtectedRoute>
+            } />
           </Routes>
         </main>
 
         <Footer />
+        
+        {/* AI Chatbot - Floating Assistant */}
+        <TravelChatbot />
       </div>
     </Router>
   );

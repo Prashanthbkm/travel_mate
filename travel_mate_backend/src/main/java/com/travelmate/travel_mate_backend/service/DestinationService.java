@@ -1,12 +1,10 @@
 package com.travelmate.travel_mate_backend.service;
 
-
 import org.springframework.stereotype.Service;
-
 import com.travelmate.travel_mate_backend.model.Destination;
 import com.travelmate.travel_mate_backend.repository.DestinationRepository;
-
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DestinationService {
@@ -19,6 +17,11 @@ public class DestinationService {
 
     public List<Destination> getAllDestinations() {
         return destinationRepository.findAll();
+    }
+
+    // ADD THIS METHOD
+    public Optional<Destination> getDestinationById(Long id) {
+        return destinationRepository.findById(id);
     }
 
     public Destination saveDestination(Destination destination) {

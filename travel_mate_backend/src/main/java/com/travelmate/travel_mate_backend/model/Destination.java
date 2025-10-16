@@ -5,7 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
-
+import java.util.Arrays;
+import java.util.List;
 
 @Entity
 public class Destination {
@@ -20,15 +21,25 @@ public class Destination {
     @NotBlank(message = "Description is mandatory")
     private String description;
 
-    // Constructors, Getters, Setters
+    private String imageUrl;
+    private String budget;
+    private String weather;
+    private String interests; // Store as comma-separated string
+
     public Destination() {
     }
 
-    public Destination(String name, String description) {
+    public Destination(String name, String description, String imageUrl, String budget, String weather,
+            String interests) {
         this.name = name;
         this.description = description;
+        this.imageUrl = imageUrl;
+        this.budget = budget;
+        this.weather = weather;
+        this.interests = interests;
     }
 
+    // Getters and Setters for all fields
     public Long getId() {
         return id;
     }
@@ -51,5 +62,42 @@ public class Destination {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getBudget() {
+        return budget;
+    }
+
+    public void setBudget(String budget) {
+        this.budget = budget;
+    }
+
+    public String getWeather() {
+        return weather;
+    }
+
+    public void setWeather(String weather) {
+        this.weather = weather;
+    }
+
+    public String getInterests() {
+        return interests;
+    }
+
+    public void setInterests(String interests) {
+        this.interests = interests;
+    }
+
+    // Helper method to get interests as list
+    public List<String> getInterestsList() {
+        return interests != null ? Arrays.asList(interests.split(",")) : List.of();
     }
 }

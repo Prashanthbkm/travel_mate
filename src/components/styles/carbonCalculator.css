@@ -1,5 +1,5 @@
 .carbon-calculator {
-  max-width: 450px;
+  max-width: 500px;
   margin: 40px auto;
   background: #e8f5e9;
   padding: 30px 25px;
@@ -15,19 +15,35 @@
   font-size: 1.8rem;
 }
 
+.carbon-calculator .input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
 .carbon-calculator input[type="number"] {
-  width: 100%;
+  flex: 2;
   padding: 14px 12px;
   font-size: 1.1rem;
   border: 2px solid #66bb6a;
   border-radius: 8px;
   outline: none;
   box-sizing: border-box;
-  margin-bottom: 20px;
   transition: border-color 0.3s ease;
 }
 
-.carbon-calculator input[type="number"]:focus {
+.carbon-calculator select {
+  flex: 1;
+  padding: 14px 12px;
+  font-size: 1.1rem;
+  border: 2px solid #66bb6a;
+  border-radius: 8px;
+  outline: none;
+  background: white;
+}
+
+.carbon-calculator input[type="number"]:focus,
+.carbon-calculator select:focus {
   border-color: #388e3c;
 }
 
@@ -41,17 +57,47 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   font-size: 1.1rem;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
-.carbon-calculator button:hover {
+.carbon-calculator button:hover:not(:disabled) {
   background-color: #2e7d32;
 }
 
-.carbon-calculator p {
-  margin-top: 25px;
+.carbon-calculator button:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+.carbon-calculator .result {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.carbon-calculator .result h3 {
+  color: #2e7d32;
+  margin-top: 0;
+  text-align: center;
+}
+
+.carbon-calculator .footprint {
   font-size: 1.3rem;
   color: #1b5e20;
   font-weight: 700;
+  text-align: center;
+  margin: 15px 0;
+}
+
+.carbon-calculator .recommendation {
+  background: #c8e6c9;
+  padding: 10px;
+  border-radius: 6px;
+  font-style: italic;
+  text-align: center;
 }
 
 .carbon-calculator small {

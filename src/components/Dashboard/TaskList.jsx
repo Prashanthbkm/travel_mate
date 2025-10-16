@@ -1,73 +1,77 @@
-// TaskList.js (updated with travel tasks)
+// TaskList.js
 import React, { useState } from "react";
 
-const initialTasks = [
-  { id: 1, title: "Pack luggage for Paris trip", completed: false, trip: "Paris" },
-  { id: 2, title: "Book Tokyo city tour", completed: true, trip: "Tokyo" },
-  { id: 3, title: "Renew passport", completed: false, trip: "General" },
-  { id: 4, title: "Buy travel adapter", completed: false, trip: "General" },
-];
+const TaskList = ({ tasks = [], upcomingTrips = [], onTaskUpdate }) => {
+  const [taskList, setTaskList] = useState(tasks);
 
-const TaskList = () => {
-  const [tasks, setTasks] = useState(initialTasks);
+  const toggleTaskCompletion = async (id) => {
+    try {
+      // Update local state immediately for better UX
+      setTaskList(prevTasks =>
+        prevTasks.map(task =>
+          task.id === id ? { ...task, completed: !task.completed } : task
+        )
+      );
 
-  const toggleTaskCompletion = id => {
-    setTasks(prevTasks =>
-      prevTasks.map(task =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
+      // If you have a backend API for updating tasks, call it here
+      // await updateTask(id, { completed: !task.completed });
+      
+      // Notify parent component about the update
+      if (onTaskUpdate) {
+        onTaskUpdate();
+      }
+    } catch (error) {
+      console.error('Error updating task:', error);
+      // Revert local state if API call fails
+      setTaskList(tasks);
+    }
   };
 
   return (
-    <div
-      style={{
-        background: "#fff",
-        borderRadius: "10px",
-        padding: "20px",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-      }}
-    >
-      <h2 style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "15px" }}>
-        Travel Tasks
-      </h2>
-      <ul style={{ listStyle: "none", padding: "0" }}>
-        {tasks.map(task => (
-          <li
-            key={task.id}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              padding: "10px 0",
-              borderBottom: "1px solid #eee",
-            }}
-          >
+    <div className="task-list">
+      <h2>Travel Tasks</h2>
+      <ul className="tasks">
+        {taskList.map(task => (
+          <li key={task.id} className="task-item">
             <input
               type="checkbox"
-              checked={task.completed}
+              checked={task.completed || false}
               onChange={() => toggleTaskCompletion(task.id)}
-              style={{ marginRight: "10px" }}
+              className="task-checkbox"
             />
-            <div style={{ flex: 1 }}>
-              <span
-                style={{
-                  textDecoration: task.completed ? "line-through" : "none",
-                  color: task.completed ? "#777" : "#333",
-                }}
-              >
+            <div className="task-content">
+              <span className={`task-title ${task.completed ? 'completed' : ''}`}>
                 {task.title}
               </span>
-              <div style={{ fontSize: "12px", color: "#666" }}>
-                {task.trip !== "General" && `For ${task.trip} trip`}
-              </div>
+              {task.trip && task.trip !== 'General' && (
+                <div className="task-trip">For {task.trip} trip</div>
+              )}
+              {task.dueDate && (
+                <div className="task-due">
+                  Due: {new Date(task.dueDate).toLocaleDateString()}
+                </div>
+              )}
             </div>
           </li>
         ))}
       </ul>
-      <div style={{ marginTop: "15px", fontSize: "14px", color: "#666" }}>
-        <span style={{ marginRight: "10px" }}>Upcoming: Paris (Jun 15)</span>
-        <span>Tokyo (Sep 5)</span>
-      </div>
+      
+      {upcomingTrips.length > 0 ? (
+        <div className="upcoming-trips">
+          <h3>Upcoming Trips</h3>
+          {upcomingTrips.map((trip, index) => (
+            <div key={index} className="trip-item">
+              <span className="trip-destination">{trip.destination}</span>
+              <span className="trip-date">{trip.date}</span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="no-trips">
+          <p>No upcoming trips scheduled</p>
+          <small>Start planning your next adventure!</small>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,3 +1,4 @@
+// Dashboard.js
 import React, { useEffect, useState } from 'react';
 import WelcomeBanner from './WelcomeBanner';
 import ProfileCard from './ProfileCard';
@@ -5,58 +6,157 @@ import ChartSection from './ChartSection';
 import Globe from './Globe';
 import RecentActivity from './RecentActivity';
 import TaskList from './TaskList';
-import { getDestinations} from '../../api'; // Adjust the path if needed
+import { 
+  getDashboardData, 
+  getCurrentUser, 
+  getUserStats, 
+  getRecentActivities,
+  getTravelTasks,
+  getTravelChartData 
+} from '../../api';
+import './Dashboard.css';
 
 const Dashboard = () => {
-  const [destinations, setDestinations] = useState([]);
+  const [dashboardData, setDashboardData] = useState(null);
+  const [userStats, setUserStats] = useState(null);
+  const [recentActivities, setRecentActivities] = useState([]);
+  const [travelTasks, setTravelTasks] = useState([]);
+  const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    const fetchDestinations = async () => {
+    const fetchDashboardData = async () => {
       try {
-        const data = await getDestinations();
-        setDestinations(data);
+        setLoading(true);
+        const user = getCurrentUser();
+        setCurrentUser(user);
+
+        if (!user) {
+          setError('Please log in to view dashboard');
+          setLoading(false);
+          return;
+        }
+
+        // Fetch all dashboard data
+        const dashboardResponse = await getDashboardData();
+        setDashboardData(dashboardResponse);
+        
+        // Set data from dashboard response
+        setUserStats(dashboardResponse.userStats);
+        setRecentActivities(dashboardResponse.recentActivities || []);
+        setTravelTasks(dashboardResponse.travelTasks || []);
+        setChartData(dashboardResponse.chartData || []);
+
       } catch (err) {
-        setError('Failed to fetch destinations');
-        console.error(err);
+        console.error('Dashboard error:', err);
+        // If there's an error, getDashboardData will return mock data
+        const mockData = await getDashboardData();
+        setDashboardData(mockData);
+        setUserStats(mockData.userStats);
+        setRecentActivities(mockData.recentActivities || []);
+        setTravelTasks(mockData.travelTasks || []);
+        setChartData(mockData.chartData || []);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDestinations();
+    fetchDashboardData();
   }, []);
 
-  return (
-    <div
-      style={{
-        fontFamily: "Arial, sans-serif",
-        background: "linear-gradient(to bottom, #4facfe, #00f2fe)",
-        minHeight: "100vh",
-        padding: "20px",
-        color: "#333",
-      }}
-    >
-      <WelcomeBanner />
+  // Function to refresh dashboard data
+  const refreshDashboard = async () => {
+    try {
+      setLoading(true);
+      const dashboardResponse = await getDashboardData();
+      setDashboardData(dashboardResponse);
+      setUserStats(dashboardResponse.userStats);
+      setRecentActivities(dashboardResponse.recentActivities || []);
+      setTravelTasks(dashboardResponse.travelTasks || []);
+      setChartData(dashboardResponse.chartData || []);
+    } catch (err) {
+      console.error('Error refreshing dashboard:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      {loading && <p>Loading destinations...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      {/* Example: Display destinations count */}
-      {!loading && !error && (
-        <p>{`Total destinations fetched: ${destinations.length}`}</p>
-      )}
-
-      <div style={{ display: "grid", gap: "20px", gridTemplateColumns: "1fr 1fr 1fr" }}>
-        <ProfileCard />
-        <ChartSection />
-        <Globe />
+  if (loading) {
+    return (
+      <div className="dashboard-loading">
+        <div className="loading-spinner"></div>
+        <p>Loading your travel dashboard...</p>
       </div>
+    );
+  }
 
-      <div style={{ display: "grid", gap: "20px", gridTemplateColumns: "1fr 1fr" }}>
-        <RecentActivity />
-        <TaskList />
+  if (error && !dashboardData) {
+    return (
+      <div className="dashboard-error">
+        <h2>Oops! Something went wrong</h2>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()} className="btn btn-primary">
+          Try Again
+        </button>
+      </div>
+    );
+  }
+
+  if (!currentUser) {
+    return (
+      <div className="dashboard-error">
+        <h2>Welcome to TravelMate!</h2>
+        <p>Please log in to view your personalized dashboard</p>
+        <button 
+          onClick={() => window.location.href = '/login'} 
+          className="btn btn-primary"
+        >
+          Go to Login
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="dashboard">
+      <WelcomeBanner 
+        user={currentUser} 
+        nextTrip={dashboardData?.nextTrip}
+        countriesVisited={userStats?.countriesVisited}
+        totalTrips={userStats?.tripsCount}
+      />
+      
+      <div className="dashboard-grid">
+        <div className="grid-main">
+          <div className="stats-row">
+            <ProfileCard 
+              user={currentUser}
+              userStats={userStats}
+            />
+            <ChartSection 
+              chartData={chartData}
+              upcomingTrips={dashboardData?.upcomingTrips}
+              savedDestinations={userStats?.savedDestinations}
+            />
+            <Globe 
+              visitedCountries={userStats?.visitedCountries}
+              countriesCount={userStats?.countriesVisited}
+            />
+          </div>
+          
+          <div className="content-row">
+            <RecentActivity 
+              activities={recentActivities}
+            />
+            <TaskList 
+              tasks={travelTasks}
+              upcomingTrips={dashboardData?.upcomingTripsList}
+              onTaskUpdate={refreshDashboard}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

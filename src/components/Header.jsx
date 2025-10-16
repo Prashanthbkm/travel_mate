@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   FaBars, 
   FaMap, 
-  FaListAlt, 
   FaGlobe, 
   FaPlane, 
   FaMoneyBillWave, 
@@ -14,13 +13,59 @@ import {
   FaChevronUp,
   FaHome,
   FaSignInAlt,
-  FaUserPlus
+  FaUserPlus,
+  FaUser,
+  FaSignOutAlt,
+  FaSun,
+  FaMoon,
+  FaGithub,
+  FaLinkedin,
+  FaInstagram
 } from "react-icons/fa";
+import { getCurrentUser, isAuthenticated, logout } from '../api';
 import './Header.css';
 
 const Header = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [subMenuOpen, setSubMenuOpen] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
+  const [darkMode, setDarkMode] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const user = getCurrentUser();
+    setCurrentUser(user);
+    
+    // Check saved theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      setDarkMode(false);
+      document.body.classList.remove('dark-mode');
+    } else {
+      setDarkMode(true);
+      document.body.classList.add('dark-mode');
+    }
+
+    // Scroll effect
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const toggleTheme = () => {
+    setDarkMode(!darkMode);
+    if (darkMode) {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+    }
+  };
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -34,6 +79,13 @@ const Header = () => {
       ...prevState,
       [item]: !prevState[item],
     }));
+  };
+
+  const handleLogout = () => {
+    logout();
+    setCurrentUser(null);
+    setSidebarOpen(false);
+    navigate('/');
   };
 
   const sidebarItems = [
@@ -78,55 +130,112 @@ const Header = () => {
     },
   ];
 
+  const isActiveLink = (path) => {
+    return location.pathname === path;
+  };
+
   return (
-    <header className="header">
-      {/* Left Navigation Links */}
+    <header className={`header ${scrolled ? 'scrolled' : ''} ${darkMode ? 'dark' : 'light'}`}>
+      {/* Left Navigation */}
       <nav className="nav-links">
-        <ul>
+        <div className="logo">
+          <Link to="/" className="logo-link">
+            <div className="logo-icon">✈️</div>
+            <span className="logo-text">TravelMate</span>
+          </Link>
+        </div>
+        
+        <ul className="main-nav">
           <li>
-            <Link to="/" className="nav-link">
-              <FaHome className="nav-icon" /> Home
+            <Link 
+              to="/" 
+              className={`nav-link ${isActiveLink('/') ? 'active' : ''}`}
+            >
+              <FaHome className="nav-icon" />
+              <span>Home</span>
             </Link>
           </li>
           <li>
-            <Link to="/login" className="nav-link">
-              <FaSignInAlt className="nav-icon" /> Login
+            <Link 
+              to="/explore" 
+              className={`nav-link ${isActiveLink('/explore') ? 'active' : ''}`}
+            >
+              <FaMap className="nav-icon" />
+              <span>Explore</span>
             </Link>
           </li>
           <li>
-            <Link to="/signup" className="nav-link">
-              <FaUserPlus className="nav-icon" /> Signup
+            <Link 
+              to="/features/expense-tracker" 
+              className={`nav-link ${isActiveLink('/features/expense-tracker') ? 'active' : ''}`}
+            >
+              <FaMoneyBillWave className="nav-icon" />
+              <span>Expenses</span>
+            </Link>
+          </li>
+          <li>
+            <Link 
+              to="/features/travel-community" 
+              className={`nav-link ${isActiveLink('/features/travel-community') ? 'active' : ''}`}
+            >
+              <FaUsers className="nav-icon" />
+              <span>Community</span>
             </Link>
           </li>
         </ul>
       </nav>
 
-      {/* Centered Logo */}
-      <div className="logo">
-        <Link to="/" className="logo-link">
-          <h1>TravelMate 🌍</h1>
-        </Link>
-      </div>
+      {/* Right Controls */}
+      <div className="header-controls">
+        {/* Theme Toggle - ALWAYS VISIBLE */}
+        <button 
+          className="theme-toggle"
+          onClick={toggleTheme}
+          aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {darkMode ? <FaSun /> : <FaMoon />}
+        </button>
 
-      {/* Right Sidebar Toggle */}
-      <div className="sidebar-toggle">
+        {/* Auth Links */}
+        <div className="auth-section">
+          {!isAuthenticated() ? (
+            <div className="auth-buttons">
+              <Link to="/login" className="auth-btn login-btn">
+                <FaSignInAlt />
+                <span>Login</span>
+              </Link>
+              <Link to="/signup" className="auth-btn signup-btn">
+                <FaUserPlus />
+                <span>Sign Up</span>
+              </Link>
+            </div>
+          ) : (
+            <div className="user-menu">
+              <div className="user-avatar">
+                <FaUser />
+              </div>
+              <span className="username">{currentUser?.username || 'User'}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Mobile Menu Toggle - ALWAYS VISIBLE BUT HIDDEN ON DESKTOP */}
         <button
-          className="menu-button"
+          className="menu-toggle"
           onClick={toggleSidebar}
-          aria-label="Toggle Sidebar"
-          aria-expanded={sidebarOpen}
+          aria-label="Toggle menu"
         >
           <FaBars />
         </button>
       </div>
 
-      {/* Sidebar */}
-      <div 
-        className={`sidebar ${sidebarOpen ? 'open' : ''}`}
-        aria-hidden={!sidebarOpen}
-      >
+      {/* Mobile Sidebar */}
+      <div className={`sidebar ${sidebarOpen ? 'open' : ''} ${darkMode ? 'dark' : 'light'}`}>
         <div className="sidebar-header">
-          <h2 className="sidebar-title">TravelMate 🌍</h2>
+          <div className="sidebar-logo">
+            <div className="logo-icon">✈️</div>
+            <span className="logo-text">TravelMate</span>
+          </div>
           <button 
             className="close-sidebar" 
             onClick={toggleSidebar}
@@ -135,71 +244,94 @@ const Header = () => {
             &times;
           </button>
         </div>
-        <nav aria-label="Main navigation">
-          <ul className="sidebar-main-menu">
+
+        {/* User Info */}
+        {isAuthenticated() && currentUser && (
+          <div className="sidebar-user">
+            <div className="user-avatar large">
+              <FaUser />
+            </div>
+            <div className="user-info">
+              <div className="user-name">{currentUser.username}</div>
+              <div className="user-email">{currentUser.email}</div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation Menu */}
+        <nav className="sidebar-nav">
+          <ul>
             {sidebarItems.map((item, index) => (
-              <li key={index} className={`sidebar-item ${subMenuOpen[item.label] ? 'active' : ''}`}>
+              <li key={index} className="nav-item">
                 {item.link ? (
                   <Link
                     to={item.link}
-                    className="sidebar-link"
+                    className={`nav-link ${isActiveLink(item.link) ? 'active' : ''}`}
                     onClick={() => setSidebarOpen(false)}
                   >
-                    <div className="sidebar-item-content">
+                    <div className="nav-icon-wrapper">
                       {item.icon}
-                      <span className="sidebar-label">{item.label}</span>
                     </div>
+                    <span>{item.label}</span>
                   </Link>
                 ) : (
-                  <>
-                    <div
-                      className="sidebar-item-header clickable"
+                  <div className="nav-group">
+                    <button 
+                      className={`nav-header ${subMenuOpen[item.label] ? 'open' : ''}`}
                       onClick={() => toggleSubMenu(item.label)}
-                      role="button"
-                      aria-expanded={!!subMenuOpen[item.label]}
-                      tabIndex={0}
                     >
-                      <div className="sidebar-item-content">
+                      <div className="nav-icon-wrapper">
                         {item.icon}
-                        <span className="sidebar-label">{item.label}</span>
                       </div>
-                      <span className="submenu-arrow">
-                        {subMenuOpen[item.label] ? <FaChevronUp /> : <FaChevronDown />}
-                      </span>
-                    </div>
+                      <span>{item.label}</span>
+                      <FaChevronDown className="chevron" />
+                    </button>
                     {item.subMenu && (
-                      <ul 
-                        className={`sidebar-submenu ${subMenuOpen[item.label] ? 'open' : ''}`}
-                        aria-hidden={!subMenuOpen[item.label]}
-                      >
+                      <div className={`submenu ${subMenuOpen[item.label] ? 'open' : ''}`}>
                         {item.subMenu.map((subItem, subIndex) => (
-                          <li key={subIndex} className="sidebar-submenu-item">
-                            <Link 
-                              to={subItem.link} 
-                              onClick={() => setSidebarOpen(false)}
-                              className="submenu-link"
-                            >
-                              <span className="submenu-label">{subItem.label}</span>
-                            </Link>
-                          </li>
+                          <Link
+                            key={subIndex}
+                            to={subItem.link}
+                            className="submenu-link"
+                            onClick={() => setSidebarOpen(false)}
+                          >
+                            {subItem.label}
+                          </Link>
                         ))}
-                      </ul>
+                      </div>
                     )}
-                  </>
+                  </div>
                 )}
               </li>
             ))}
           </ul>
         </nav>
+
+        {/* Footer in Sidebar */}
+        <div className="sidebar-footer">
+          {isAuthenticated() && (
+            <button className="logout-btn" onClick={handleLogout}>
+              <FaSignOutAlt />
+              <span>Logout</span>
+            </button>
+          )}
+          <div className="social-links">
+            <a href="https://github.com/Prashanthbkm" target="_blank" rel="noopener noreferrer" className="social-link">
+              <FaGithub />
+            </a>
+            <a href="https://www.linkedin.com/in/prashanth-b-k-m-914773211/" target="_blank" rel="noopener noreferrer" className="social-link">
+              <FaLinkedin />
+            </a>
+            <a href="https://www.instagram.com/rock_prashanth_09/" target="_blank" rel="noopener noreferrer" className="social-link">
+              <FaInstagram />
+            </a>
+          </div>
+        </div>
       </div>
+
+      {/* Overlay */}
       {sidebarOpen && (
-        <div 
-          className="sidebar-overlay" 
-          onClick={toggleSidebar}
-          role="button"
-          aria-label="Close sidebar"
-          tabIndex={0}
-        ></div>
+        <div className="sidebar-overlay" onClick={toggleSidebar} />
       )}
     </header>
   );

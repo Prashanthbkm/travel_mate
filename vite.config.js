@@ -6,7 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'http://localhost:8080', // Replace with your backend URL
+      '/api': 'http://localhost:8080', // Backend server
+    },
+    watch: {
+      // 👇 This tells Vite to ignore backend build folders
+      ignored: ['**/travel_mate_backend/**'],
     },
   },
 })

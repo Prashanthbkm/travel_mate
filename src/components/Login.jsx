@@ -1,150 +1,218 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { login } from '../api';
-import { useNavigate } from 'react-router-dom';  // <-- Import useNavigate
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { FaUser, FaLock, FaEye, FaEyeSlash, FaPlane, FaGoogle, FaGithub } from 'react-icons/fa';
+import { login } from '../api';  // ✅ CORRECT PATH
+import './Auth.css';
+
+// ... rest of your Login component code
 
 const Login = () => {
-  const [form, setForm] = useState({ username: '', password: '' });
+  const [form, setForm] = useState({ 
+    username: '', 
+    password: '' 
+  });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();  // <-- Initialize navigate
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check for success message from signup
+  const successMessage = location.state?.message;
 
   const handleChange = e => {
-    setForm({ ...form, [e.target.id]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setError('');
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
     setError('');
+    
+    if (!form.username || !form.password) {
+      setError('Please fill in all fields');
+      return;
+    }
+
     setLoading(true);
+    
     try {
       const data = await login(form);
-      alert('Login successful!');
-      console.log('Login Response:', data);
-      navigate('/dashboard');  // <-- Redirect to dashboard after success
+      
+      if (data.message === 'Login successful') {
+        // Show success and redirect
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1000);
+      } else {
+        setError('Login failed. Please try again.');
+      }
+      
     } catch (err) {
-      setError(typeof err === 'string' ? err : 'Login failed. Please try again.');
+      setError(err || 'Login failed. Please check your credentials.');
     }
+    
     setLoading(false);
   };
 
   return (
-    <div style={{
-      display: 'flex', justifyContent: 'center', alignItems: 'center',
-      height: '100vh',
-      backgroundImage: 'linear-gradient(to bottom, #f0f4f8, #e0f2fe)',
-    }}>
+    <div className="auth-container">
+      {/* Animated Background */}
+      <div className="auth-background">
+        <div className="floating-shapes">
+          <div className="shape shape-1"></div>
+          <div className="shape shape-2"></div>
+          <div className="shape shape-3"></div>
+        </div>
+      </div>
+
       <motion.div
-        initial={{ opacity: 0, y: -50, rotateX: -20 }}
-        animate={{ opacity: 1, y: 0, rotateX: 0 }}
-        transition={{ duration: 0.8, ease: 'easeInOut' }}
-        style={{
-          width: '100%',
-          maxWidth: '450px',
-          padding: '30px',
-          backgroundColor: 'rgba(255, 255, 255, 0.85)',
-          boxShadow: '0 12px 24px -8px rgba(0, 0, 0, 0.15), 0 8px 8px -4px rgba(0, 0, 0, 0.08)',
-          borderRadius: '16px',
-          backdropFilter: 'blur(12px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          perspective: '1000px',
-        }}
+        initial={{ opacity: 0, y: 50, scale: 0.9 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="auth-card"
       >
-        <motion.h2
-          style={{
-            fontSize: '36px',
-            fontWeight: 'bold',
-            marginBottom: '30px',
-            color: '#1e293b',
-            textAlign: 'center',
-            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.08)',
-            transform: 'rotateY(10deg)',
-            transition: 'transform 0.5s ease',
-          }}
-          whileHover={{ rotateY: '0deg' }}
-        >
-          Log In
-        </motion.h2>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ marginBottom: '24px' }}>
-            <label htmlFor="username" style={{
-              display: 'block', fontSize: '18px', fontWeight: '600', color: '#334155', marginBottom: '10px'
-            }}>
-              Username
-            </label>
-            <motion.input
-              type="text"
-              id="username"
-              value={form.username}
-              onChange={handleChange}
-              style={{
-                width: '100%', padding: '14px', marginTop: '8px',
-                border: '2px solid #d1d5db', borderRadius: '10px',
-                fontSize: '18px', transition: 'all 0.3s ease', outline: 'none',
-                backgroundColor: '#f9fafb',
-                boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.04)',
-              }}
-              placeholder="Enter your username"
-              whileFocus={{
-                borderColor: '#4f46e5',
-                boxShadow: '0 0 0 4px rgba(79, 70, 229, 0.1)',
-              }}
-              whileHover={{
-                backgroundColor: '#f3f4f6',
-              }}
-              required
-            />
+        {/* Header */}
+        <div className="auth-header">
+          <div className="auth-logo">
+            <FaPlane className="logo-icon" />
+            <span className="logo-text">TravelMate</span>
           </div>
-          <div style={{ marginBottom: '30px' }}>
-            <label htmlFor="password" style={{
-              display: 'block', fontSize: '18px', fontWeight: '600', color: '#334155', marginBottom: '10px'
-            }}>
-              Password
-            </label>
-            <motion.input
-              type="password"
-              id="password"
-              value={form.password}
-              onChange={handleChange}
-              style={{
-                width: '100%', padding: '14px', marginTop: '8px',
-                border: '2px solid #d1d5db', borderRadius: '10px',
-                fontSize: '18px', transition: 'all 0.3s ease', outline: 'none',
-                backgroundColor: '#f9fafb',
-                boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.04)',
-              }}
-              placeholder="Enter your password"
-              whileFocus={{
-                borderColor: '#4f46e5',
-                boxShadow: '0 0 0 4px rgba(79, 70, 229, 0.1)',
-              }}
-              whileHover={{
-                backgroundColor: '#f3f4f6',
-              }}
-              required
-            />
+          <h1 className="auth-title">Welcome Back</h1>
+          <p className="auth-subtitle">Sign in to continue your journey</p>
+        </div>
+
+        {/* Success Message from Signup */}
+        {successMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="success-message"
+          >
+            {successMessage}
+          </motion.div>
+        )}
+
+        <form onSubmit={handleSubmit} className="auth-form">
+          {/* Username Field */}
+          <div className="form-group">
+            <div className="input-container">
+              <FaUser className="input-icon" />
+              <input
+                type="text"
+                name="username"
+                value={form.username}
+                onChange={handleChange}
+                placeholder="Enter your username"
+                className="auth-input"
+                disabled={loading}
+                required
+              />
+            </div>
           </div>
 
-          {error && <p style={{ color: 'red', marginBottom: '16px', textAlign: 'center' }}>{error}</p>}
+          {/* Password Field */}
+          <div className="form-group">
+            <div className="input-container">
+              <FaLock className="input-icon" />
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                className="auth-input"
+                disabled={loading}
+                required
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+          </div>
 
+          {/* Remember Me & Forgot Password */}
+          <div className="form-options">
+            <label className="checkbox-container">
+              <input type="checkbox" />
+              <span className="checkmark"></span>
+              Remember me
+            </label>
+            <Link to="/forgot-password" className="forgot-link">
+              Forgot password?
+            </Link>
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="error-message"
+            >
+              {error}
+            </motion.div>
+          )}
+
+          {/* Submit Button */}
           <motion.button
             type="submit"
             disabled={loading}
-            whileHover={{ scale: 1.04, y: -2 }}
-            whileTap={{ scale: 0.98, y: 0 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-            style={{
-              width: '100%', padding: '14px',
-              backgroundColor: loading ? '#a3a3f7' : '#4f46e5',
-              color: 'white',
-              borderRadius: '10px', fontSize: '20px', fontWeight: '700',
-              transition: 'all 0.3s ease', cursor: loading ? 'not-allowed' : 'pointer',
-              boxShadow: '0 6px 12px -4px rgba(79, 70, 229, 0.3)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
-            }}
+            whileHover={{ scale: loading ? 1 : 1.02 }}
+            whileTap={{ scale: loading ? 1 : 0.98 }}
+            className="auth-button primary"
           >
-            {loading ? 'Logging In...' : 'Log In'}
+            {loading ? (
+              <div className="button-loading">
+                <div className="spinner"></div>
+                Signing In...
+              </div>
+            ) : (
+              'Sign In'
+            )}
           </motion.button>
+
+          {/* Divider */}
+          <div className="auth-divider">
+            <span>Or continue with</span>
+          </div>
+
+          {/* Social Login */}
+          <div className="social-buttons">
+            <motion.button 
+              type="button" 
+              className="social-button google"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FaGoogle className="social-icon" />
+              <span>Google</span>
+            </motion.button>
+            <motion.button 
+              type="button" 
+              className="social-button github"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FaGithub className="social-icon" />
+              <span>GitHub</span>
+            </motion.button>
+          </div>
+
+          {/* Signup Link */}
+          <div className="auth-footer">
+            <p>
+              Don't have an account?{' '}
+              <Link to="/signup" className="auth-link">
+                Create one
+              </Link>
+            </p>
+          </div>
         </form>
       </motion.div>
     </div>
