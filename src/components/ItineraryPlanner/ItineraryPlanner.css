@@ -1,3 +1,5 @@
+/* ItineraryPlanner.css */
+
 /* Base Styles */
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -81,7 +83,7 @@ body {
 
 .tab-btn.active {
   background-color: #3b82f6;
-  color: white;
+  color: #1e293b;
 }
 
 .search-bar {
@@ -107,7 +109,7 @@ body {
   padding: 10px;
   margin-bottom: 16px;
   background-color: #8b5cf6;
-  color: white;
+  color: #1e293b;
   border: none;
   border-radius: 6px;
   font-weight: 500;
@@ -152,7 +154,7 @@ body {
 
 .add-btn {
   background-color: #3b82f6;
-  color: white;
+  color: #1e293b;
   border: none;
   border-radius: 4px;
   padding: 4px 8px;
@@ -206,7 +208,7 @@ body {
   display: flex;
   gap: 8px;
   font-size: 12px;
-  color: #64748b;
+  color: #1e293b;
 }
 
 .activity-type {
@@ -246,7 +248,7 @@ body {
   display: block;
   margin-bottom: 4px;
   font-size: 14px;
-  color: #475569;
+  color: #1e293b;
 }
 
 .form-group input,
@@ -290,12 +292,12 @@ body {
 
 .save-btn {
   background-color: #10b981;
-  color: white;
+  color: #1e293b;
 }
 
 .share-btn {
   background-color: #64748b;
-  color: white;
+  color: #1e293b;
 }
 
 .save-btn:hover,
@@ -307,6 +309,7 @@ body {
 .Toastify__toast {
   font-family: 'Inter', sans-serif;
   border-radius: 8px !important;
+  color: #1e293b;
 }
 
 /* Responsive Adjustments */
@@ -343,6 +346,7 @@ body {
 .destination-selector label {
   margin-right: 10px;
   font-weight: bold;
+  color: #1e293b;
 }
 
 .destination-selector select {
@@ -366,6 +370,7 @@ body {
   border-radius: 4px;
   padding: 5px 10px;
   width: 100%;
+  color: #1e293b;
 }
 
 .planner-header {
@@ -391,5 +396,74 @@ body {
 .loading-spinner {
   text-align: center;
   padding: 60px 20px;
-  color: #666;
+  color: #1e293b;
+}
+
+/* Demo Mode Banner */
+.demo-mode-banner {
+  background-color: #fef3c7;
+  color: #92400e;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* Spinner Styles */
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+
+.spinner-small {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* General styles for popup text in map */
+.leaflet-popup-content h3 {
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.leaflet-popup-content p {
+  color: #1e293b;
+  margin: 4px 0;
+}
+
+/* Input placeholder color */
+::placeholder {
+  color: #64748b;
+}
+
+/* Dropdown options */
+select option {
+  color: #1e293b;
+}
+
+/* Catch-all for any remaining buttons with white text */
+button:not(.tab-btn):not(.remove-btn):not(.add-btn) {
+  color: #1e293b;
+}
+
+/* General rule to ensure text color inheritance */
+* {
+  color: inherit;
 }
