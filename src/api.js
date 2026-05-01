@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = 'https://travelmate-n9g5.onrender.com';
 
 // Axios instance to handle requests
 const apiClient = axios.create({
