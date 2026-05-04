@@ -18,7 +18,12 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+
+        // ✅ IMPORTANT: Add your Vercel frontend URL here
+        config.setAllowedOrigins(Arrays.asList(
+
+                "https://travel-mate-lr1cvx8aw-prashanth-b-k-ms-projects.vercel.app"));
+
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
 
@@ -30,7 +35,7 @@ public class CorsConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(Customizer.withDefaults()) // use the corsFilter
+                .cors(Customizer.withDefaults())
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 
