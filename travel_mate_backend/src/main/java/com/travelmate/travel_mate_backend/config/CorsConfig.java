@@ -19,10 +19,9 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
 
-        // ✅ IMPORTANT: Add your Vercel frontend URL here
-        config.setAllowedOrigins(Arrays.asList(
-
-                "https://travel-mate-lr1cvx8aw-prashanth-b-k-ms-projects.vercel.app"));
+        // ✅ Allow ALL Vercel deployments (IMPORTANT FIX)
+        config.setAllowedOriginPatterns(Arrays.asList(
+                "https://*.vercel.app"));
 
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
