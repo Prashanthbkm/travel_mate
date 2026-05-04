@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'https://travelmate-n9g5.onrender.com/api';
+
 
 const FlightHotelSearch = ({ onBookingMade, onSearch }) => {
   const [searchType, setSearchType] = useState('flights');

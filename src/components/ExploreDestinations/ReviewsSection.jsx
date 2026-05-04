@@ -17,7 +17,7 @@ const ReviewsSection = ({ destinationId }) => {
     const fetchReviews = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/reviews/destination/${destinationId}`
+          `https://travelmate-n9g5.onrender.com/api/reviews/destination/${destinationId}`
         );
         if (response.ok) {
           const data = await response.json();
@@ -59,7 +59,7 @@ const ReviewsSection = ({ destinationId }) => {
         timestamp: new Date().toISOString(),
       };
 
-      const response = await fetch("http://localhost:8080/api/reviews", {
+      const response = await fetch("https://travelmate-n9g5.onrender.com/api/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reviewToSubmit),

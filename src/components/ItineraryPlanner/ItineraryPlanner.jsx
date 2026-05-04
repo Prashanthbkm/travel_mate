@@ -133,7 +133,7 @@ const DESTINATIONS = {
 };
 
 // Add these API functions to your component
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "https://travelmate-n9g5.onrender.com/api";
 
 const itineraryAPI = {
   // Get all itineraries

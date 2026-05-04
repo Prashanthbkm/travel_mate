@@ -443,7 +443,7 @@ const ExploreDestinations = () => {
                 }))
             };
 
-            const response = await fetch('http://localhost:8080/api/itineraries', {
+           const response = await fetch('https://travelmate-n9g5.onrender.com/api/itineraries', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

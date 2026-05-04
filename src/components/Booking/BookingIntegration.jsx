@@ -6,7 +6,7 @@ import '../styles/BookingIntegration.css';
 import axios from 'axios';
 import { getCurrentUser, isAuthenticated, logout } from '../../api.js'; // ✅ Correct import
 
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'https://travelmate-n9g5.onrender.com/api';
 
 const BookingIntegration = () => {
   const [activeTab, setActiveTab] = useState('search');

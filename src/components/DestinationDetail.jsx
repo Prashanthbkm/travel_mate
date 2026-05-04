@@ -22,9 +22,12 @@ const DestinationDetail = () => {
     const fetchDestination = async () => {
       try {
         setLoading(true);
+        // const response = await fetch(
+        //   `http://localhost:8080/api/destinations/${id}`
+        // );
         const response = await fetch(
-          `http://localhost:8080/api/destinations/${id}`
-        );
+  `https://travelmate-n9g5.onrender.com/api/destinations/${id}`
+);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch destination: ${response.status}`);

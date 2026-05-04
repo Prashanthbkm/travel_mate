@@ -8,7 +8,7 @@ const ItineraryEditor = () => {
   const [loading, setLoading] = useState(true);
   const [currentItineraryId, setCurrentItineraryId] = useState(null);
 
-  const API_BASE_URL = "http://localhost:8080/api";
+  const API_BASE_URL = "https://travelmate-n9g5.onrender.com/api";
 
   // Load or create a simple itinerary on component mount
   useEffect(() => {

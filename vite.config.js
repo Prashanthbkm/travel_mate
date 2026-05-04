@@ -1,3 +1,19 @@
+// import { defineConfig } from 'vite'
+// import react from '@vitejs/plugin-react-swc'
+
+// // https://vite.dev/config/
+// export default defineConfig({
+//   plugins: [react()],
+//   server: {
+//     proxy: {
+//       '/api': 'http://localhost:8080', // Backend server
+//     },
+//     watch: {
+//       // 👇 This tells Vite to ignore backend build folders
+//       ignored: ['**/travel_mate_backend/**'],
+//     },
+//   },
+// })
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 
@@ -5,11 +21,8 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy: {
-      '/api': 'http://localhost:8080', // Backend server
-    },
     watch: {
-      // 👇 This tells Vite to ignore backend build folders
+      // Ignore backend build folders
       ignored: ['**/travel_mate_backend/**'],
     },
   },
